@@ -28,7 +28,7 @@
                         <!-- The way how it worked before (around 12.0.x) -->
                         <!--<p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this" update="recTbl" />-->
 
-                        <!-- The way how it works now 15.0.9 (chnaged: process, update and oncomplete) -->
+                        <!-- The way how it works now 15.0.9 (changed: process, update and oncomplete) -->
                         <p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this f1:recTbl:statusFltr" update="f1:recTbl:statusFltr" oncomplete="PF('recTblWV').filter();" />
 
                         <!-- For diagnostics -->
