@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ua.debug</groupId>
+    <artifactId>jakartaFacesTestApp</artifactId>
+    <packaging>war</packaging>
+    <version>1.0</version>
+
+    <name>jakartaFacesTestApp</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <jakartaee>10.0.0</jakartaee>
+        <payara.version>6.2025.10</payara.version>
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>15.0.9</version>
+            <classifier>jakarta</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>4.6.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.19.0</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- Jakarta EE 10 and container dependencies -->
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-web-api</artifactId>
+            <version>${jakartaee}</version>
+            <scope>provided</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+
+        <directory>mavenBuild</directory>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
+                <configuration>
+                    <showDeprecation>${maven-compiler-plugin.showDeprecation}</showDeprecation>
+                    <debug>${maven-compiler-plugin.debug}</debug>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+                <configuration>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                    </archive>
+                    <archiveClasses>true</archiveClasses>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+    <profiles>
+
+        <profile>
+            <id>dev-micro-debug</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>fish.payara.maven.plugins</groupId>
+                        <artifactId>payara-micro-maven-plugin</artifactId>
+                        <version>2.5.1</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <payaraVersion>${payara.version}</payaraVersion>
+                            <appendSystemProperties>true</appendSystemProperties>
+                            <uberJarClassifier>server</uberJarClassifier>
+                            <deployWar>true</deployWar>
+                            <contextRoot>/</contextRoot>
+                            <daemon>false</daemon>
+                            <javaCommandLineOptions>
+                                <option>
+                                    <value>-server</value>
+                                </option>
+                                <option>
+                                    <value>-Xmx2048m</value>
+                                </option>
+                                <option>
+                                    <value>-Xdebug</value>
+                                </option>
+                                <option>
+                                    <value>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5080</value>
+                                </option>
+                            </javaCommandLineOptions>
+                            <commandLineOptions>
+                                <option>
+                                    <key>--port</key>
+                                    <value>8080</value>
+                                </option>
+                                <option>
+                                    <key>--clusterName</key>
+                                    <value>appClusterDev</value>
+                                </option>
+                                <option>
+                                    <key>--group</key>
+                                    <value>appGroupDev</value>
+                                </option>
+                                <option>
+                                    <key>--disablephonehome</key>
+                                </option>
+                            </commandLineOptions>
+                        </configuration>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
