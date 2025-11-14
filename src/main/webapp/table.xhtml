@@ -25,11 +25,11 @@
                     <hr/>
 
                     <p:selectOneMenu id="wrkfViewName" widgetVar="wrkfViewNameWV" value="#{tableController.view}" >
-                        <!-- The way how it worked before (around 12.0.x) -->
-                        <!--<p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this" update="recTbl" />-->
+                        <!-- The way how it worked before (around 12.0.x), but does not work now -->
+                        <p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this" update="recTbl" />
 
-                        <!-- The way how it works now 15.0.9 (changed: process, update and oncomplete) -->
-                        <p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this f1:recTbl:statusFltr" update="f1:recTbl:statusFltr" oncomplete="PF('recTblWV').filter();" />
+                        <!-- The way how it can work now (on 15.0.10), changed properties: 'process', 'update' and 'oncomplete'. But this approach is not desirable -->
+                        <!--<p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this f1:recTbl:statusFltr" update="f1:recTbl:statusFltr" oncomplete="PF('recTblWV').filter();" />-->
 
                         <!-- For diagnostics -->
                         <!--<p:ajax event="valueChange" listener="#{tableController.viewNameChangeListener}" process="@this f1:recTbl:statusFltr" update="statusFltrDpl f1:recTbl:statusFltr" oncomplete="PF('recTblWV').filter();" />-->
@@ -48,6 +48,7 @@
                     <br/>
                     <br/>
 
+                    <!-- These params do not help as well: partialUpdate="false" skipChildren="false" -->
                     <p:dataTable id="recTbl" value="#{recordsController.records}" var="record" widgetVar="recTblWV">
 
                         <f:facet name="header">
@@ -71,7 +72,7 @@
                                     <p:ajax event="toggleSelect" process="@this" oncomplete="PF('recTblWV').filter();" delay="300" />
                                     <f:selectItems value="#{tableController.statusOptions}" />
                                 </p:selectCheckboxMenu>
-                                <!--<div>Filter values: #{tableController.statusFilter}</div>-->
+                                <div>Filter values: #{tableController.statusFilter}</div>
                             </f:facet>
 
                             <h:outputText value="#{record.status}" />

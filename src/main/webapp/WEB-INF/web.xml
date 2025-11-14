@@ -52,7 +52,7 @@
     </session-config>
 
     <welcome-file-list>
-        <welcome-file>main.xhtml</welcome-file>
+        <welcome-file>table.xhtml</welcome-file>
     </welcome-file-list>
 
     <error-page>
